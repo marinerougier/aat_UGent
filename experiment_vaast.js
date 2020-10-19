@@ -914,7 +914,7 @@ switch(training_cond) {
     timeline.push(Gene_Instr,
                   cont_instructions_1,
                   cont_instructions_2,
-                  //vaast_control,
+                  vaast_control,
                   vaast_instructions_end_task1,
                   vaast_instructions_1,
                   cont_instructions_3,
