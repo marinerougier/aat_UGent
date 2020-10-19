@@ -963,7 +963,7 @@ if (is_compatible) {
     },
     on_finish: function () {
       saving_browser_events(completion = true);
-      window.location.href = "https://marinerougier.github.io/AAT_JPSP_3/RC.html?id=" + id + "&prolificID=" + 
+      window.location.href = "https://marinerougier.github.io/aat_UGent/RC.html?id=" + id + "&prolificID=" + 
       prolificID + "&training_cond=" + training_cond + "&control_cond=" + control_cond 
       + "&ColorGroup=" + ColorGroup;
     }
