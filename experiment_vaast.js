@@ -69,8 +69,9 @@ if(prolificID == null) {prolificID = "999";}
 
 var id = jsPsych.randomization.randomID(15)
 
-// Preload images
+// Preload variables
 var preloadimages = [];
+var preloadvideo = [];
 
 // connection status ---------------------------------------------------------------------
 // This section ensure that we don't lose data. Anytime the 
