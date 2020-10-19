@@ -961,6 +961,7 @@ if (is_compatible) {
   jsPsych.init({
     timeline: timeline,
     preload_images: preloadimages,
+    preload_video: preloadvideo,
     max_load_time: 1000 * 500,
     exclusions: {
       min_width: 800,
