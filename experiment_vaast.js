@@ -194,8 +194,7 @@ var videos = [
       "videos/App_blue_G1B.mp4",
       "videos/App_blue_G1Y.mp4",
       "videos/App_yellow_G1B.mp4",
-      "videos/App_yellow_G1Y.mp4",
-      "stimuli/Face95_J_Example.png"
+      "videos/App_yellow_G1Y.mp4"
 ];
 
 preloadimages.push(faces);
