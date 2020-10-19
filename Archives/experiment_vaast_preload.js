@@ -190,7 +190,16 @@ var faces = [
       "stimuli/Face95_J_Example.png"
 ];
 
+// Preload videos
+var videos = [
+      "videos/App_blue_G1B.mp4",
+      "videos/App_blue_G1Y.mp4",
+      "videos/App_yellow_G1B.mp4",
+      "videos/App_yellow_G1Y.mp4"
+];
+
 preloadimages.push(faces);
+preloadvideo.push(videos);
 
 var video_app_blue_list = ["videos/App_blue_G1B.mp4", "videos/App_blue_G1Y.mp4"];
 var video_app_yellow_list = ["videos/App_yellow_G1B.mp4", "videos/App_yellow_G1Y.mp4"];
@@ -298,8 +307,6 @@ switch (training_cond) {
     }};
     break; 
 }
-
-preloadvideo.push(video);
 
 // VAAST stimuli ------------------------------------------------------------------------
 // vaast image stimuli ------------------------------------------------------------------
