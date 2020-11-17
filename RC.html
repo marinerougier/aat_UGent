@@ -518,7 +518,7 @@
             });
 
             var data = jsPsych.data.get().filterCustom(function (x) {
-                return x.task == "RC1"
+                return x.task == "RC1" || x.task == "RC2"
             }).csv();
 
             /* Send data to Firebase and redirect to Qualtrics */
