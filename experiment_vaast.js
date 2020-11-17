@@ -346,6 +346,35 @@ var save_vaast_trial = {
 }
 
 // EXPERIMENT ---------------------------------------------------------------------------
+// Consent --------------------------------------------------------------
+  var check_consent = function(elem) {
+    if (document.getElementById('info').checked 
+      & document.getElementById('volunt').checked 
+      & document.getElementById('anony').checked 
+      & document.getElementById('end').checked 
+      & document.getElementById('consqc').checked 
+      & document.getElementById('summ').checked 
+      & document.getElementById('participate').checked ) {
+      return true;
+    }
+    else {
+      alert("If you wish to participate, you must check all the boxes.");
+      return false;
+    }
+    return false;
+  };
+
+
+  var consent = {
+    type:'external-html',
+    url: "https://marinerougier.github.io/Ugent_1/external_page_consent.html",
+    cont_btn: "start",
+    check_fn: check_consent,
+        on_load: function() {
+          window.scrollTo(0, 0)
+        },
+  };
+
 // Switching to fullscreen --------------------------------------------------------------
 var fullscreen_trial = {
   type: 'fullscreen',
@@ -662,7 +691,7 @@ var timeline = [];
 
 // fullscreen
 timeline.push(
-  //welcome,
+  consent,
   fullscreen_trial,
   hiding_cursor);
 
