@@ -25,11 +25,12 @@
 // 
 // dirty hack to lock scrolling ---------------------------------------------------------
 // note that jquery needs to be loaded.
+/*
 $('body').css({ 'overflow': 'hidden' });
 $(document).bind('scroll', function () {
   window.scrollTo(0, 0);
 });
-
+*/
 // safari & ie exclusion ----------------------------------------------------------------
 var is_safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 var is_ie = /*@cc_on!@*/false || !!document.documentMode;
@@ -76,7 +77,7 @@ var preloadimages = [];
 // This section ensure that we don't lose data. Anytime the 
 // client is disconnected, an alert appears onscreen
 var connectedRef = firebase.database().ref(".info/connected");
-var connection = firebase.database().ref("VAAST_NewExpe2_JPSP/" + id + "/")
+var connection = firebase.database().ref("VAAST_AAT_sensory/" + id + "/")
 var dialog = undefined;
 var first_connection = true;
 
@@ -407,8 +408,7 @@ var vaast_instructions_1 = {
   stimulus:
     "<h1 class ='custom-title'>Video Game task</h1>" +
     "<p class='instructions'>This task is much like a video game. You will be " +
-    "in a virtual environment in which you will be able to move forward or to move backward. "+
-    "The environment in which you will move is displayed below. </p>" +
+    "in a virtual environment (displayed below) in which you will be able to move forward or to move backward. </p>" +
     "<br>" +
     "<img src = 'media/vaast-background.png'>" +
     "<br><br>" +
@@ -479,7 +479,7 @@ var vaast_instructions_2_G1B = {
     "<br>" +
     "<p class='instructions'><b>Please, take a few moments to look at the faces. </b><br><br>"+
     "Your task will be to <b>move forward or to move backward</b> " +
-    "as a function of the background color (i.e., blue or yellow) of these images. "+
+    "as a function of the background color of these images. "+
     "More specific instructions will follow. <br><br></p></center>" +
     "<br>" +
     "<p class = 'continue-instructions'>Press <strong>space</strong> to" +
@@ -544,7 +544,7 @@ var vaast_instructions_5 = {
 var vaast_instructions_5_end = {
   type: "html-keyboard-response",
   stimulus:
-    "<p class='instructions'>The training trials are now over.</b></p>" +
+    "<p class='instructions'><center>The training trials are now over.</center></b></p>" +
     "<br>" +
     "<p class = 'continue-instructions'>Press <strong>space</strong> to" +
     " continue.</p>",
@@ -556,7 +556,7 @@ var vaast_instructions_6 = {
   type: "html-keyboard-response",
   stimulus:
     "<h1 class ='custom-title'>Video Game task</h1>" +
-    "<p class='instructions'>Here are the specific instructions for this task: " +
+    "<p class='instructions'>Now, here are the specific instructions for this task: " +
     "<ul class='instructions'>" +
     "<li><strong>APPROACH faces with a " + group_to_approach + " background </strong></li>" +
     "<strong>by pressing the MOVE FORWARD key (namely, the E key) </strong>" +
