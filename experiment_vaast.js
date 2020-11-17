@@ -57,7 +57,7 @@ if (!is_compatible) {
 // firebase initialization ---------------------------------------------------------------
 var firebase_config = {
   apiKey: "AIzaSyBwDr8n-RNCbBOk1lKIxw7AFgslXGcnQzM",
-  databaseURL: "https://aatjpsp2.firebaseio.com/"
+  databaseURL: "https://postdocgent.firebaseio.com/"
 };
 
 firebase.initializeApp(firebase_config);
@@ -69,9 +69,8 @@ if(prolificID == null) {prolificID = "999";}
 
 var id = jsPsych.randomization.randomID(15)
 
-// Preload variables
+// Preload images
 var preloadimages = [];
-var preloadvideo = [];
 
 // connection status ---------------------------------------------------------------------
 // This section ensure that we don't lose data. Anytime the 
@@ -120,20 +119,12 @@ var browser_events_n = 1;
 // Variable input -----------------------------------------------------------------------
 // Variable used to define experimental condition : approached color and group associated with the color
 
-// Expe (training) vs. control (cat. task) condition 
-
+// Instruction vs. instruction+sensory conditions
 var training_cond = jsPsych.data.getURLVariable("training_cond");
-if(training_cond == null) {training_cond = jsPsych.randomization.sampleWithoutReplacement(["cont_instr_vis"], 1)[0];}
-//if(training_cond == null) {training_cond = jsPsych.randomization.sampleWithoutReplacement(["AAT", "cont_instr", "cont_instr_vis"], 1)[0];}
-
-// for the control condition, randomization of the E vs. I key (for the blue vs. yellow group)
-var control_cond = jsPsych.randomization.sampleWithoutReplacement(["blue_s", "blue_f"], 1)[0];
+if(training_cond == null) {training_cond = jsPsych.randomization.sampleWithoutReplacement(["cont_instr_G1Y", "cont_instr_G1B", "cont_instr_vis_G1Y", "cont_instr_vis_G1B"], 1)[0];}
 
 // for the AAT, randomization of which group is approached and which is avoided
 var approached_grp = jsPsych.randomization.sampleWithoutReplacement(["approach_blue", "approach_yellow"], 1)[0];
-
-// group associated with the yellow or blue color
-var ColorGroup   = jsPsych.randomization.sampleWithoutReplacement(["G1Y", "G1B"], 1)[0];
 
 // cursor helper functions
 var hide_cursor = function () {
@@ -186,173 +177,62 @@ var faces = [
       "stimuli/Face85_B.png",
       "stimuli/Face103_B.png",
       "stimuli/Face116_B.png",
-      "stimuli/Face119_B_Example.png",
-      "stimuli/Face95_J_Example.png"
 ];
 
 preloadimages.push(faces);
 
-var video_app_blue_list = ["videos/App_blue_G1B.mp4", "videos/App_blue_G1Y.mp4"];
-var video_app_yellow_list = ["videos/App_yellow_G1B.mp4", "videos/App_yellow_G1Y.mp4"];
-
-video_app_blue = _.sampleSize(video_app_blue_list, 1);
-video_app_yellow = _.sampleSize(video_app_yellow_list, 1);
-
 // VAAST --------------------------------------------------------------------------------
 // VAAST variables ----------------------------------------------------------------------
 
-var movement_blue     = undefined;
-var movement_yellow   = undefined;
 var group_to_approach = undefined;
 var group_to_avoid    = undefined;
-var group_to_s    = undefined;
-var group_to_f    = undefined;
 
 switch (training_cond) {
-  case "cont_instr":
-    {if (control_cond == "blue_s" & approached_grp == "approach_blue"){
-    movement_blue = "approach";
-    movement_yellow = "avoidance";
-    group_to_s = "blue";
-    group_to_f    = "yellow";
-    group_to_approach = "blue";
-    group_to_avoid    = "yellow";
-    video = video_app_blue;
-    } else if (control_cond == "blue_f" & approached_grp == "approach_blue"){
-    movement_blue = "avoidance";
-    movement_yellow = "approach";
-    group_to_s = "yellow";
-    group_to_f    = "blue";
-    group_to_approach = "blue";
-    group_to_avoid    = "yellow";
-    video = video_app_blue;
-    } else if (control_cond == "blue_s" & approached_grp == "approach_yellow"){
-    movement_blue = "approach";
-    movement_yellow = "avoidance";
-    group_to_s = "blue";
-    group_to_f    = "yellow";
-    group_to_approach = "yellow";
-    group_to_avoid    = "blue";
-    video = video_app_yellow;
-    } else if (control_cond == "blue_f" & approached_grp == "approach_yellow"){
-    movement_blue = "avoidance";
-    movement_yellow = "approach";
-    group_to_s = "yellow";
-    group_to_f    = "blue";
-    group_to_approach = "yellow";
-    group_to_avoid    = "blue";
-    video = video_app_yellow;
-    }};
-    break;
-
-  case "cont_instr_vis":
-  case "cont_instr":
-    {if (control_cond == "blue_s" & approached_grp == "approach_blue"){
-    movement_blue = "approach";
-    movement_yellow = "avoidance";
-    group_to_s = "blue";
-    group_to_f    = "yellow";
-    group_to_approach = "blue";
-    group_to_avoid    = "yellow";
-    video = video_app_blue;
-    } else if (control_cond == "blue_f" & approached_grp == "approach_blue"){
-    movement_blue = "avoidance";
-    movement_yellow = "approach";
-    group_to_s = "yellow";
-    group_to_f    = "blue";
-    group_to_approach = "blue";
-    group_to_avoid    = "yellow";
-    video = video_app_blue;
-    } else if (control_cond == "blue_s" & approached_grp == "approach_yellow"){
-    movement_blue = "approach";
-    movement_yellow = "avoidance";
-    group_to_s = "blue";
-    group_to_f    = "yellow";
-    group_to_approach = "yellow";
-    group_to_avoid    = "blue";
-    video = video_app_yellow;
-    } else if (control_cond == "blue_f" & approached_grp == "approach_yellow"){
-    movement_blue = "avoidance";
-    movement_yellow = "approach";
-    group_to_s = "yellow";
-    group_to_f    = "blue";
-    group_to_approach = "yellow";
-    group_to_avoid    = "blue";
-    video = video_app_yellow;
-    }};
-    break;
-
-  case "AAT":
+  case "cont_instr_G1Y":
     {if (approached_grp == "approach_blue"){
-    movement_blue = "approach";
-    movement_yellow = "avoidance";
     group_to_approach = "blue";
     group_to_avoid    = "yellow";
-    video = video_app_blue;
     } else if (approached_grp == "approach_yellow"){
-    movement_blue = "avoidance";
-    movement_yellow = "approach";
     group_to_approach = "yellow";
     group_to_avoid    = "blue";
-    video = video_app_yellow;
+  }};
+    break;
+  case "cont_instr_G1B":
+    {if (approached_grp == "approach_blue"){
+    group_to_approach = "blue";
+    group_to_avoid    = "yellow";
+    } else if (approached_grp == "approach_yellow"){
+    group_to_approach = "yellow";
+    group_to_avoid    = "blue";
+  }};
+    break;
+  case "cont_instr_vis_G1Y":
+    {if (approached_grp == "approach_blue"){
+    group_to_approach = "blue";
+    group_to_avoid    = "yellow";
+    } else if (approached_grp == "approach_yellow"){
+    group_to_approach = "yellow";
+    group_to_avoid    = "blue";
     }};
-    break; 
+    break;
+  case "cont_instr_vis_G1B":
+    {if (approached_grp == "approach_blue"){
+    group_to_approach = "blue";
+    group_to_avoid    = "yellow";
+    } else if (approached_grp == "approach_yellow"){
+    group_to_approach = "yellow";
+    group_to_avoid    = "blue";
+    }};
+    break;
 }
-
-preloadvideo.push(video);
 
 // VAAST stimuli ------------------------------------------------------------------------
 // vaast image stimuli ------------------------------------------------------------------
 
-var vaast_stim_training_G1Y = [
-  {movement: movement_blue, group: "blue", stimulus: 'stimuli/Face19_B.png'},
-  {movement: movement_blue, group: "blue", stimulus: 'stimuli/Face28_B.png'},
-  {movement: movement_blue, group: "blue", stimulus: 'stimuli/Face55_B.png'},
-  {movement: movement_blue, group: "blue", stimulus: 'stimuli/Face95_B.png'},
-  {movement: movement_blue, group: "blue", stimulus: 'stimuli/Face104_B.png'},
-  {movement: movement_blue, group: "blue", stimulus: 'stimuli/Face115_B.png'},
-  {movement: movement_blue, group: "blue", stimulus: 'stimuli/Face119_B.png'},
-  {movement: movement_blue, group: "blue", stimulus: 'stimuli/Face142_B.png'},
-  {movement: movement_yellow,  group: "yellow",  stimulus: 'stimuli/Face10_J.png'},
-  {movement: movement_yellow,  group: "yellow",  stimulus: 'stimuli/Face16_J.png'},
-  {movement: movement_yellow,  group: "yellow",  stimulus: 'stimuli/Face17_J.png'},
-  {movement: movement_yellow,  group: "yellow",  stimulus: 'stimuli/Face45_J.png'},
-  {movement: movement_yellow,  group: "yellow",  stimulus: 'stimuli/Face85_J.png'},
-  {movement: movement_yellow,  group: "yellow",  stimulus: 'stimuli/Face103_J.png'},
-  {movement: movement_yellow,  group: "yellow",  stimulus: 'stimuli/Face116_J.png'},
-  {movement: movement_yellow,  group: "yellow",  stimulus: 'stimuli/Face132_J.png'}
+var vaast_stim_training = [
+  {movement: "approach", group: "blue", stimulus: "approach"},
+  {movement: "avoidance", group: "blue", stimulus: "avoid"}
 ]
-
-var vaast_stim_training_G1B = [
-  {movement: movement_yellow, group: "yellow", stimulus: 'stimuli/Face19_J.png'},
-  {movement: movement_yellow, group: "yellow", stimulus: 'stimuli/Face28_J.png'},
-  {movement: movement_yellow, group: "yellow", stimulus: 'stimuli/Face55_J.png'},
-  {movement: movement_yellow, group: "yellow", stimulus: 'stimuli/Face95_J.png'},
-  {movement: movement_yellow, group: "yellow", stimulus: 'stimuli/Face104_J.png'},
-  {movement: movement_yellow, group: "yellow", stimulus: 'stimuli/Face115_J.png'},
-  {movement: movement_yellow, group: "yellow", stimulus: 'stimuli/Face119_J.png'},
-  {movement: movement_yellow, group: "yellow", stimulus: 'stimuli/Face142_J.png'},
-  {movement: movement_blue, group: "blue",  stimulus: 'stimuli/Face10_B.png'},
-  {movement: movement_blue, group: "blue",  stimulus: 'stimuli/Face16_B.png'},
-  {movement: movement_blue, group: "blue",  stimulus: 'stimuli/Face17_B.png'},
-  {movement: movement_blue, group: "blue",  stimulus: 'stimuli/Face45_B.png'},
-  {movement: movement_blue, group: "blue",  stimulus: 'stimuli/Face85_B.png'},
-  {movement: movement_blue, group: "blue",  stimulus: 'stimuli/Face103_B.png'},
-  {movement: movement_blue, group: "blue",  stimulus: 'stimuli/Face116_B.png'},
-  {movement: movement_blue, group: "blue",  stimulus: 'stimuli/Face132_B.png'}
-]
-
-var vaast_stim_training    = undefined;
-switch (ColorGroup) {
-case "G1Y":
-    vaast_stim_training    = vaast_stim_training_G1Y;
-    break;
-
-case "G1B":
-    vaast_stim_training    = vaast_stim_training_G1B;
-    break;
-}
-
 
 // vaast background images --------------------------------------------------------------,
 
@@ -364,16 +244,6 @@ var background = [
   "background/5.jpg",
   "background/6.jpg",
   "background/7.jpg"
-];
-
-var background_grey = [
-  "background_grey/1.jpeg",
-  "background_grey/2.jpeg",
-  "background_grey/3.jpeg",
-  "background_grey/4.jpeg",
-  "background_grey/5.jpeg",
-  "background_grey/6.jpeg",
-  "background_grey/7.jpeg"
 ];
 
 // vaast stimuli sizes -------------------------------------------------------------------
@@ -419,15 +289,13 @@ var next_position_training = function () {
 // init ---------------------------------------------------------------------------------
 var saving_id = function () {
   database
-    .ref("participant_id_AAT_JPSP/")
+    .ref("participant_id_AAT_Ghent/")
     .push()
     .set({
       id: id,
       prolificID: prolificID,
       training_cond : training_cond,
-      control_cond : control_cond,
       approached_grp : approached_grp,
-      ColorGroup: ColorGroup,
       timestamp: firebase.database.ServerValue.TIMESTAMP
     })
 }
@@ -435,15 +303,13 @@ var saving_id = function () {
 // vaast trial --------------------------------------------------------------------------
 var saving_vaast_trial = function () {
   database
-    .ref("vaast_trial_AAT_JPSP_3/").
+    .ref("vaast_trial_AAT_Ghent/").
     push()
     .set({
       id: id,
       prolificID: prolificID,
-      training_cond : training_cond,
-      control_cond : control_cond,   
+      training_cond : training_cond, 
       approached_grp : approached_grp,
-      ColorGroup: ColorGroup,   
       timestamp: firebase.database.ServerValue.TIMESTAMP,
       vaast_trial_data: jsPsych.data.get().last(4).json()
     })
@@ -454,15 +320,13 @@ var saving_vaast_trial = function () {
 
 var saving_browser_events = function (completion) {
   database
-    .ref("browser_event_AAT_JPSP/")
+    .ref("browser_event_AAT_Ghent/")
     .push()
     .set({
       id: id,
       prolificID: prolificID,
       training_cond : training_cond,
-      control_cond : control_cond,
       approached_grp : approached_grp,
-      ColorGroup: ColorGroup,
       timestamp: firebase.database.ServerValue.TIMESTAMP,
       completion: completion,
       event_data: jsPsych.data.getInteractionData().json()
@@ -499,8 +363,8 @@ var Gene_Instr = {
     "<h1 class ='custom-title'> Study on face categorization</h1>" +
     "<br>" +
     "<p class='instructions'><center> In this study, we are interested in the way people categorize " +
-    "others as a function of their face. <br>You will have to " +
-    "perform several categorization tasks and to answer a few questions. </p></center>" +
+    "others as a function of their face. <br>You will " +
+    "perform several tasks and answer a few questions. </p></center>" +
     "<br>" +
     "<p class = 'continue-instructions'>Press <strong>space</strong> to" +
     " continue.</p>",
@@ -524,25 +388,76 @@ var vaast_instructions_1 = {
   choices: [32]
 };
 
-var vaast_instructions_2 = {
+var vaast_instructions_2_G1Y = {
   type: "html-keyboard-response",
   stimulus:
     "<h1 class ='custom-title'>Video Game task</h1>" +
-    "<p class='instructions'>A series of faces will be displayed in this environment. <br>" +
-    "<p class='instructions'>These faces have been deliberately blurred. Here are " +
-    "two examples of faces that will be displayed: <br><br>" +
-    "<center><img src = 'stimuli/Face119_B_Example.png'>" +
+    "<center><p class='instructions'>A series of faces will be displayed in this environment. <br>" +
+    "These faces have been deliberately blurred. Here are the faces that will be displayed: <br><br></p>" +
+    "<img src = 'stimuli/Face19_B.png'>" +
+    "<img src = 'stimuli/Face28_B.png'>" +
+    "<img src = 'stimuli/Face55_B.png'>" +
+    "<img src = 'stimuli/Face95_B.png'>" +
+    "<img src = 'stimuli/Face104_B.png'>" +
+    "<img src = 'stimuli/Face115_B.png'>" +
+    "<img src = 'stimuli/Face119_B.png'>" +
+    "<img src = 'stimuli/Face142_B.png'><br>" +
     "                              " +
-    "<img src = 'stimuli/Face95_J_Example.png'></center>" +
+    "<img src = 'stimuli/Face10_J.png'>" +
+    "<img src = 'stimuli/Face16_J.png'>" +
+    "<img src = 'stimuli/Face17_J.png'>" +
+    "<img src = 'stimuli/Face45_J.png'>" +
+    "<img src = 'stimuli/Face85_J.png'>" +
+    "<img src = 'stimuli/Face103_J.png'>" +
+    "<img src = 'stimuli/Face116_J.png'>" +
+    "<img src = 'stimuli/Face132_J.png'>" +
     "<br>" +
-    "<p class='instructions'>Your task will be to <b>move forward or to move backward</b> " +
-    "as a function of the background color (i.e., blue or yellow) of these images. "+
-    "More specific instructions will follow. <br><br>" +
+    "<br>" +
+    "<p class='instructions'><b>Please, take a few moments to look at the faces. </b><br><br>"+
+    "Your task will be to <b>move forward or to move backward</b> " +
+    "as a function of the background color of these images. "+
+    "<u>More specific instructions will follow</u>. <br><br></p></center>" +
     "<br>" +
     "<p class = 'continue-instructions'>Press <strong>space</strong> to" +
     " continue.</p>",
   choices: [32]
 };
+
+var vaast_instructions_2_G1B = {
+  type: "html-keyboard-response",
+  stimulus:
+    "<h1 class ='custom-title'>Video Game task</h1>" +
+    "<center><p class='instructions'>A series of faces will be displayed in this environment. <br>" +
+    "These faces have been deliberately blurred. Here are the faces that will be displayed: <br><br></p>" +
+    "<center><img src = 'stimuli/Face19_J.png'>" +
+    "<img src = 'stimuli/Face28_J.png'>" +
+    "<img src = 'stimuli/Face55_J.png'>" +
+    "<img src = 'stimuli/Face95_J.png'>" +
+    "<img src = 'stimuli/Face104_J.png'>" +
+    "<img src = 'stimuli/Face115_J.png'>" +
+    "<img src = 'stimuli/Face119_J.png'>" +
+    "<img src = 'stimuli/Face142_J.png'><br>" +
+    "                              " +
+    "<img src = 'stimuli/Face10_B.png'>" +
+    "<img src = 'stimuli/Face16_B.png'>" +
+    "<img src = 'stimuli/Face17_B.png'>" +
+    "<img src = 'stimuli/Face45_B.png'>" +
+    "<img src = 'stimuli/Face85_B.png'>" +
+    "<img src = 'stimuli/Face103_B.png'>" +
+    "<img src = 'stimuli/Face116_B.png'>" +
+    "<img src = 'stimuli/Face132_B.png'></center>" +
+    "<br>" +
+    "<br>" +
+    "<p class='instructions'><b>Please, take a few moments to look at the faces. </b><br><br>"+
+    "Your task will be to <b>move forward or to move backward</b> " +
+    "as a function of the background color (i.e., blue or yellow) of these images. "+
+    "More specific instructions will follow. <br><br></p></center>" +
+    "<br>" +
+    "<p class = 'continue-instructions'>Press <strong>space</strong> to" +
+    " continue.</p>",
+  choices: [32]
+};
+
 
 var vaast_instructions_3 = {
   type: "html-keyboard-response",
@@ -565,10 +480,10 @@ var vaast_instructions_4 = {
   stimulus:
     "<h1 class ='custom-title'>Video Game task</h1>" +
     "<p class='instructions'>At the beginning of each trial, you will see the 'O' symbol. " +
-    "This symbol indicates that you have to press the START key (namely, the <b>D key</b>) to start the trial. </p>" +
+    "This symbol indicates that you should press the START key (namely, the <b>D key</b>) to start the trial. </p>" +
     "<p class='instructions'>Then, you will see a fixation cross (+) at the center of the screen, followed by a face. </p>" +
-    "<p class='instructions'>As a function of the background color (blue or yellow) of the face, your task is to move forward or backward by pressing the the MOVE FORWARD key (namely, the <b>E key</b>) "+
-    "or the MOVE BACKWARD key (namely, the <b>C key</b>) as fast as possible. After the key press, the face will disappear and you will have to " +
+    "<p class='instructions'>As a function of the background color (blue or yellow) of the face, your task is to move forward or backward by pressing the MOVE FORWARD key (namely, the <b>E key</b>) "+
+    "or the MOVE BACKWARD key (namely, the <b>C key</b>) as fast as possible. After the key press, the face will disappear and you should " +
     "press again the START key (D key). " +
     "<p class='instructions'><b>Please <u>use only the index finger</u> of your favorite hand for all these actions. </b></p>" +
     "<br>" +
@@ -577,12 +492,42 @@ var vaast_instructions_4 = {
   choices: [32]
 };
 
-
 var vaast_instructions_5 = {
   type: "html-keyboard-response",
   stimulus:
     "<h1 class ='custom-title'>Video Game task</h1>" +
-    "<p class='instructions'>More precisely, you will have to: " +
+    "<p class='instructions'>Before starting the task, let's start with few training trials. Your task is to:" +
+    "<ul class='instructions'>" +
+    "<li><strong>APPROACH when the word 'approach' is displayed </strong></li>" +
+    "<strong>by pressing the MOVE FORWARD key (namely, the E key) </strong>" +
+    "<br>" +
+    "<br>" +
+    "<li><strong>AVOID when the word 'avoid' is displayed </strong></li>" +
+    "<strong>by pressing the the MOVE BACKWARD key (namely, the C key)</strong>" +
+    "</ul>" +
+    "<br>" +
+    "<br>" +
+    "<p class = 'continue-instructions'>Press <strong>space</strong> to" +
+    " continue.</p>",
+  choices: [32]
+};
+
+var vaast_instructions_5_end = {
+  type: "html-keyboard-response",
+  stimulus:
+    "<p class='instructions'>The training trials are now over.</b></p>" +
+    "<br>" +
+    "<p class = 'continue-instructions'>Press <strong>space</strong> to" +
+    " continue.</p>",
+  choices: [32]
+};
+
+
+var vaast_instructions_6 = {
+  type: "html-keyboard-response",
+  stimulus:
+    "<h1 class ='custom-title'>Video Game task</h1>" +
+    "<p class='instructions'>Here are the specific instructions for this task: " +
     "<ul class='instructions'>" +
     "<li><strong>APPROACH faces with a " + group_to_approach + " background </strong></li>" +
     "<strong>by pressing the MOVE FORWARD key (namely, the E key) </strong>" +
@@ -601,110 +546,14 @@ var vaast_instructions_5 = {
   choices: [32]
 };
 
-// control cond instructions
 
-var cont_instructions_1 = {
+var vaast_instructions_end = {
   type: "html-keyboard-response",
   stimulus:
-    "<h1 class ='custom-title'>Categorization task</h1>" +
-    "<p class='instructions'>In this task, a series of faces will be displayed on a grey screen. " +
-    "Your task will be to categorize them as fast as possible. <br>" +
-    "<p class='instructions'>These faces have been deliberately blurred. Here are " +
-    "two examples of faces that will be displayed: <br><br>" +
-    "<center><img src = 'stimuli/Face119_B_Example.png'>" +
-    "                              " +
-    "<img src = 'stimuli/Face95_J_Example.png'></center>" +
-    "<br>" +
-    "<p class='instructions'>Your task will be to <b>categorize the faces </b>(by pressing the S key or the F key of your keyboard) " +
-    "as a function of the background color (i.e., blue or yellow) of these images. "+
-    "More specific instructions will follow. <br><br>" +
-    "<br>" +
-    "<p class = 'continue-instructions'>Press <strong>space</strong> to" +
-    " continue.</p>",
-  choices: [32]
-};
-
-var cont_instructions_2 = {
-  type: "html-keyboard-response",
-  stimulus:
-    "<h1 class ='custom-title'>Categorization task</h1>" +
-    "<p class='instructions'>More precisely, you will have to: " +
-    "<ul class='instructions'>" +
-    "<li><strong>Press the S key for faces with a " + group_to_s + " background </strong></li>" +
-    "<li><strong>Press the F key for faces with a " + group_to_f + " background </strong></li>" +
-    "</ul>" +
-    "<p class='instructions'>Please read carefully and make sure that you memorize the instructions above. </p>" +
-    "<p class='instructions'><strong>Also, note that is it EXTREMELY IMPORTANT that you try to be as fast and accurate as you can. </strong>" +
-    "A red cross will appear if your response is incorrect. </p>" +
-    "<br>" +
-    "<br>" +
-    "<p class = 'continue-instructions'>Press <strong>space</strong> to" +
-    " continue.</p>",
-  choices: [32]
-};
-
-var cont_instructions_3 = {
-  type: "html-keyboard-response",
-  stimulus:
-    "<h1 class ='custom-title'>Video Game task</h1>" +
-    "<p class='instructions'>The same faces that you saw in the previous task " +
-    "will be displayed in the environment. <br><br>" +
-    "<center><img src = 'stimuli/Face119_B_Example.png'>" +
-    "                              " +
-    "<img src = 'stimuli/Face95_J_Example.png'></center>" +
-    "<br>" +
-    "<p class='instructions'>Your task will be to move forward or to move backward " +
-    "as a function of the background color (i.e., blue or yellow) of these images. "+
-    "More specific instructions will follow. <br><br>" +
-    "<br>" +
-    "<p class = 'continue-instructions'>Press <strong>space</strong> to" +
-    " continue.</p>",
-  choices: [32]
-};
-
-var cont_instructions_video_1 = {
-  type: "html-keyboard-response",
-  stimulus:
-    "<h1 class ='custom-title'>Video Game task</h1>" +
-    "<p class='instructions'>When you will press the move forward (E) anc move backward (C) keys, you will have the impression to " +
-    "move in the virtual environment. On the next page, we will display <b>a short video clip (around 1 minute) "+
-    "so that you can visualize how it will be like to move forward/backward in the environment.</b><br><br>" +
-    "The video will start automatically so it is <b>important that you remain focused. </b></p>" +
-    "<br>" +
-    "<p class = 'continue-instructions'>Press <strong>space</strong> to" +
-    " continue.</p>",
-  choices: [32]
-};
-
-var cont_instructions_video_2 = {
-    type: 'video-keyboard-response',
-    sources: video,
-    choices: ['m'],
-    //choices: jsPsych.NO_KEYS,
-    trial_ends_after_video: true,
-    autoplay: true,
-    width: 1000
-}
-
-var cont_instructions_end = {
-  type: "html-keyboard-response",
-  stimulus:
-    "<p class='instructions'>Before starting the video game task, we will ask to to <b>perform another " +
+    "<p class='instructions'>Before starting the video game task, we will ask to <b>perform another " +
     "categorization task named 'Recognition task'. </b></p>" +
     "<br>" +
     "<p class='instructions'><b>You will perform the Video Game task <u>at the end of the experiment.</u></b></p>" +
-    "<br>" +
-    "<p class = 'continue-instructions'>Press <strong>space</strong> to" +
-    " continue.</p>",
-  choices: [32]
-};
-
-
-
-var vaast_instructions_end_task1 = {
-  type: "html-keyboard-response",
-  stimulus:
-    "<p class='instructions'><center>This task is completed. You will now start the second task. </center></p>" +
     "<br>" +
     "<p class = 'continue-instructions'>Press <strong>space</strong> to" +
     " continue.</p>",
@@ -740,11 +589,11 @@ var vaast_fixation = {
 }
 
 var vaast_first_step_training = {
-  type: 'vaast-image',
+  type: 'vaast-text',
   stimulus: jsPsych.timelineVariable('stimulus'),
   position: 3,
   background_images: background,
-  font_sizes: image_sizes,
+  font_sizes: stim_sizes,
   approach_key: "e",
   avoidance_key: "c",
   stim_movement: jsPsych.timelineVariable('movement'),
@@ -756,11 +605,11 @@ var vaast_first_step_training = {
 }
 
 var vaast_second_step = {
-  type: 'vaast-image',
+  type: 'vaast-text',
   position: next_position_training,
   stimulus: jsPsych.timelineVariable('stimulus'),
   background_images: background,
-  font_sizes: image_sizes,
+  font_sizes: stim_sizes,
   stim_movement: jsPsych.timelineVariable('movement'),
   response_ends_trial: false,
   trial_duration: 650
@@ -786,7 +635,7 @@ var vaast_training = {
     save_vaast_trial
   ],
   timeline_variables: vaast_stim_training,
-  repetitions: 1, //here, put 12 !!!!!
+  repetitions: 5, //here, put 12 !!!!!
   randomize_order: true,
   data: {
     phase: "training",
@@ -796,72 +645,6 @@ var vaast_training = {
   }
 };
 
-
-// Creating a trial for the CONTROL cond---------------------------------------------------------------------
-
-var vaast_fixation_c = {
-  type: 'vaast-fixation',
-  fixation: "+",
-  font_size: 46,
-  position: 3,
-  background_images: background_grey
-}
-
-var vaast_first_step_training_c = {
-  type: 'vaast-image',
-  stimulus: jsPsych.timelineVariable('stimulus'),
-  position: 3,
-  background_images: background_grey,
-  font_sizes: image_sizes,
-  approach_key: "s",
-  avoidance_key: "f",
-  stim_movement: jsPsych.timelineVariable('movement'),
-  html_when_wrong: '<span style="color: red; font-size: 80px">&times;</span>',
-  force_correct_key_press: false,
-  display_feedback: true,
-  feedback_duration: 500,
-  response_ends_trial: true
-}
-
-var vaast_second_step_c = {
-  type: 'vaast-image',
-  position: 3,
-  stimulus: jsPsych.timelineVariable('stimulus'),
-  background_images: background_grey,
-  font_sizes: image_sizes,
-  stim_movement: jsPsych.timelineVariable('movement'),
-  response_ends_trial: false,
-  trial_duration: 650
-}
-
-var vaast_second_step_training_c = {
-  chunk_type: "if",
-  timeline: [vaast_second_step_c],
-  conditional_function: function () {
-    var data = jsPsych.data.getLastTrialData().values()[0];
-    return data.correct;
-  }
-}
-
-// Control training block -----------------------------------------------------------------
-var vaast_control = {
-  timeline: [
-    //vaast_start_c,
-    vaast_fixation_c,
-    vaast_first_step_training_c,
-    vaast_second_step_training_c,
-    save_vaast_trial
-  ],
-  timeline_variables: vaast_stim_training,
-  repetitions: 1, //here, put 12 !!!!!
-  randomize_order: true,
-  data: {
-    phase: "control",
-    stimulus: jsPsych.timelineVariable('stimulus'),
-    movement: jsPsych.timelineVariable('movement'),
-    group: jsPsych.timelineVariable('group'),
-  }
-};
 
 
 // end fullscreen -----------------------------------------------------------------------
@@ -887,43 +670,47 @@ timeline.push(
 timeline.push(save_id);
 
 switch(training_cond) {
-  case "AAT":
+  case "cont_instr_G1Y":
     timeline.push(Gene_Instr,
                   vaast_instructions_1,
-                  vaast_instructions_2,
+                  vaast_instructions_2_G1Y,
+                  vaast_instructions_3,
+                  vaast_instructions_4,
+                  vaast_instructions_6,
+                  vaast_instructions_end);
+    break;
+  case "cont_instr_G1B":
+    timeline.push(Gene_Instr,
+                  vaast_instructions_1,
+                  vaast_instructions_2_G1B,
+                  vaast_instructions_3,
+                  vaast_instructions_4,
+                  vaast_instructions_6,
+                  vaast_instructions_end);
+    break;
+  case "cont_instr_vis_G1Y":
+    timeline.push(Gene_Instr,
+                  vaast_instructions_1,
+                  vaast_instructions_2_G1Y,
                   vaast_instructions_3,
                   vaast_instructions_4,
                   vaast_instructions_5,
                   vaast_training,
-                  vaast_instructions_end_task1);
+                  vaast_instructions_5_end,
+                  vaast_instructions_6,
+                  vaast_instructions_end);
     break;
-  case "cont_instr":
+  case "cont_instr_vis_G1B":
     timeline.push(Gene_Instr,
-                  cont_instructions_1,
-                  cont_instructions_2,
-                  vaast_control,
-                  vaast_instructions_end_task1,
                   vaast_instructions_1,
-                  cont_instructions_3,
+                  vaast_instructions_2_G1B,
                   vaast_instructions_3,
                   vaast_instructions_4,
                   vaast_instructions_5,
-                  cont_instructions_end);
-    break;
-  case "cont_instr_vis":
-    timeline.push(Gene_Instr,
-                  cont_instructions_1,
-                  cont_instructions_2,
-                  vaast_control,
-                  vaast_instructions_end_task1,
-                  vaast_instructions_1,
-                  cont_instructions_3,
-                  vaast_instructions_3,
-                  vaast_instructions_4,
-                  vaast_instructions_5,
-                  cont_instructions_video_1,
-                  cont_instructions_video_2,
-                  cont_instructions_end);
+                  vaast_training,
+                  vaast_instructions_5_end,
+                  vaast_instructions_6,
+                  vaast_instructions_end);
     break;
 }
 
@@ -940,12 +727,10 @@ timeline.push(fullscreen_trial_exit);
 var loading_gif = ["media/loading.gif"]
 var vaast_instructions_images = ["media/vaast-background.png", "media/keyboard-vaastt.png"];
 var vaast_bg_filename = background;
-var vaast_cont_filename = background_grey;
 
 jsPsych.pluginAPI.preloadImages(loading_gif);
 jsPsych.pluginAPI.preloadImages(vaast_instructions_images);
 jsPsych.pluginAPI.preloadImages(vaast_bg_filename);
-jsPsych.pluginAPI.preloadImages(vaast_cont_filename);
 
 // timeline initiaization ---------------------------------------------------------------
 https://marinerougier.github.io/Expe6_RC_3appuis/RCmarine2.html
@@ -955,10 +740,9 @@ if (is_compatible) {
   jsPsych.init({
     timeline: timeline,
     preload_images: preloadimages,
-    preload_video: preloadvideo,
     max_load_time: 1000 * 500,
     exclusions: {
-      min_width: 800,
+      min_width: 900,
       min_height: 600,
     },
     on_interaction_data_update: function () {
@@ -967,8 +751,7 @@ if (is_compatible) {
     on_finish: function () {
       saving_browser_events(completion = true);
       window.location.href = "https://marinerougier.github.io/aat_UGent/RC.html?id=" + id + "&prolificID=" + 
-      prolificID + "&training_cond=" + training_cond + "&control_cond=" + control_cond 
-      + "&ColorGroup=" + ColorGroup;
+      prolificID + "&training_cond=" + training_cond;
     }
   });
 }

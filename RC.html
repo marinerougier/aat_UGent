@@ -54,9 +54,9 @@
     var imgLink = function (imgNum, oriInv) {
 
         if (oriInv == "inv") {
-            return 'https://marinerougier.github.io/aat_UGent/CIs_Inv/faceInv' + imgNum + '.png?raw=1'
+            return 'https://marinerougier.github.io/AAT_JPSP/CIs_Inv/faceInv' + imgNum + '.png?raw=1'
         } else {
-            return 'https://marinerougier.github.io/aat_UGent/CIs_Ori/faceOri' + imgNum + '.png?raw=1'
+            return 'https://marinerougier.github.io/AAT_JPSP/CIs_Ori/faceOri' + imgNum + '.png?raw=1'
         };
     };
 
@@ -69,8 +69,6 @@
     var prolificID    = jsPsych.data.getURLVariable("prolificID");
     var training_cond = jsPsych.data.getURLVariable("training_cond");
     var approached_grp = jsPsych.data.getURLVariable("approached_grp");
-    var control_cond  = jsPsych.data.getURLVariable("control_cond");
-    var ColorGroup    = jsPsych.data.getURLVariable("ColorGroup");
     var colorOrder    = jsPsych.data.getURLVariable("colorOrder");
     
     /* Generate RC trials */
@@ -141,7 +139,7 @@
         fullscreen_mode: true,
         delay_after: 500,
         message: "",
-        button_label: "Please click here to start the next task",
+        button_label: "Please click here to start the Recognition task",
     };
 
     /* RC instructions */
@@ -168,10 +166,10 @@
         stimulus: function () {
             var html = "";
             html += "<h1>Recognition task</h1>";
-            html += "<p class = 'justify'> In this task, we will present you a series of faces similar to the one presented below. ";
+            html += "<p class = 'justify'> In this task, we will present a series of faces similar to the one presented. ";
             html += "At each trial, we will present you 12 faces. ";
-            html += "Again, these faces have been deliberately blurred but with a different kind of blur. ";
-            html += "As a result, the 12 faces will look rather similar to each other, yet these faces are different.</p>";
+            html += "These faces will again be blurred but with a different kind of blur this time. ";
+            html += "As a result of this, the 12 faces you will see will look rather similar to each other. However, the faces are all (slightly) different.</p>";
             html += "<img width='200' style='padding: 0px' src='" + imgLink(474, 'ori') + "'>";
             return html;
         },
@@ -185,7 +183,7 @@
             var html = "";
             html += "<h1>Recognition task, Part 1</h1>";
             html += "<p class = 'justify'>At each trial, your task is to choose among the 12 faces ";
-            html += "the one that you think is <b>the most similar to the group of faces having a " + color1 + " background.</b></p>";
+            html += "the one that you think is <b>the most similar to the group of faces that had a " + color1 + " background.</b></p>";
             html += "<p class = 'justify'>Use your mouse to select a face at each trial.</p>";
             html += "<img width='200' style='padding: 0px' src='" + imgLink(474, 'ori') + "'>";
             return html;
@@ -200,7 +198,7 @@
             var html = "";
             html += "<h1>Recognition task, Part 2</h1>";
             html += "<p class = 'justify'>At each trial, your task is to choose among the 12 faces ";
-            html += "the one that you think is <b>the most similar to the group of faces having a " + color2 + " background.</b></p>";
+            html += "the one that you think is <b>the most similar to the group of faces that had a " + color2 + " background.</b></p>";
             html += "<p class = 'justify'>Use your mouse to select a face at each trial.</p>";
             html += "<img width='200' style='padding: 0px' src='" + imgLink(474, 'ori') + "'>";
             return html;
@@ -257,7 +255,7 @@
             stimulus: function () {
                 html = "";
                 html += "<p>Select the face that you think is the most similar to </br>the group of faces ";
-                html += "having a " + color1 + " background</br></br>";
+                html += "that had a " + color1 + " background</br></br>";
                 jsPsych.timelineVariable('trialImgs', true).map(function (e) {
                     html += "<img class='rcimg-12' src='" + e + "'>";
                 });
@@ -287,7 +285,7 @@
             stimulus: function () {
                 html = "";
                 html += "<p>Select the face that you think is the most similar to </br>the group of faces ";
-                html += "having a " + color2 + " background</br></br>";
+                html += "that had a " + color2 + " background</br></br>";
                 jsPsych.timelineVariable('trialImgs', true).map(function (e) {
                     html += "<img class='rcimg-12' src='" + e + "'>";
                 });
@@ -338,6 +336,19 @@
         },
     };
 
+
+   var appGrpOptions = ['approach ' + genColor("#2a57ea", "blue") + '-background and avoid ' + genColor("#b5a21b", "yellow") + '-background faces', 'approach ' + genColor("#b5a21b", "yellow") + '-background and avoid ' + genColor("#2a57ea", "blue") + '-background faces', 'I do not remember'];
+    var reportedAppGrp = {
+        type: 'survey-multi-choice',
+        questions: [{ prompt: "Please indicate the instructions you received in the Video Game task:", options: appGrpOptions, required: true }],
+        button_label: "continue",
+        on_finish: function (data) {
+            jsPsych.data.addProperties({
+                reportedAppGrp: JSON.parse(data.responses).Q0,
+            });
+            console.log(data);
+        },
+    };
 
    var genderOptions = ['Male', 'Female', 'Other'];
     var gender = {
@@ -431,20 +442,22 @@
         '<span style="color:#cc3300; font-weight: bold">Debriefing and survey validation</span></br></br>' +
         '<p class = "justify">' +
         'First of all, thank you for your participation! ' +
+        'First of all, you should know that you will not really perform the Video Game task. '+
+        'In this experiment, we were more interested in the effect of the instructions you received.'+
         'The aim of this experiment was to test whether the first part of the experiment ' +
-        '(i.e., the categorization task and/or the video game task) ' +
+        '(i.e., the instructions you received in the video game task) ' +
         'influenced your responses to the second part (i.e., in the recognition task). ' +
-        'Specifically, in the video game task, half of participants had to approach (by pressing the E key) or avoid (by pressing the C key) ' +
-        'the faces as function of their background color. The other half was in the control condition and merely had to categorize the faces ' +
-        'without any approach or avoidance actions (i.e., by pressing the S or the F key) and only received instructions about the video game task.' +
-        'Our hypothesis is that the approach/avoidance actions toward the two groups of faces should have impacted the facial representation '+
+        'Specifically, in the video game task, half of participants received the instructions to approach blue-background faces ' +
+        'and to avoid yellow-background faces, whereas the other half had the reverse instructions. '+
+        'Moreover, half of participants had a small training to experience approach and avoidance trials in the Video Game task '+
+        'while the other half did not receive the training. '+
+        'Our hypothesis is that the approach/avoidance instructions toward the two groups of faces should have impacted the facial representation '+
         'of these two groups: people should have a more positive representation of the group associated with approach actions and a more ' +
-        'negative representation of the group associated with avoidance actions. We measured these two representations in the last task. ' +
-        'On the contrary, this effect should not be observed for participants in the control condition who did not perform any approach '+
-        'or avoidance actions. </br></br>'+
+        'negative representation of the group associated with avoidance actions. However, we expect this effect only for the participants'+
+        'who experienced some training trials in the Video Game task. We measured these two representations in the last task. </br></br>'+
         'If you have any questions / remarks regarding this experiment, please contact me at:</br>marine.rougier@ugent.be</br></br>' +
-        'Here is your completion code for Prolific: <b>XXX</b></br></br>' +
-        'Or you can click on the following link: <a href="https://app.prolific.co/submissions/complete?cc=XXX">https://app.prolific.ac/submissions/complete?cc=XXX</a>' +
+        'Here is your completion code for Prolific: <b>436C3DF2</b></br></br>' +
+        'Or you can click on the following link: <a href="https://app.prolific.co/submissions/complete?cc=436C3DF2">https://app.prolific.co/submissions/complete?cc=436C3DF2</a>' +
         '</p>'
 
 
@@ -464,6 +477,7 @@
     timeline.push(RCinst4);
     timeline.push(RC2);
     timeline.push(likingGrp);
+    timeline.push(reportedAppGrp);
     timeline.push(gender);
     timeline.push(age);
     timeline.push(language);
@@ -501,8 +515,6 @@
                 prolificID: prolificID,
                 training_cond: training_cond,
                 approached_grp: approached_grp,
-                control_cond: control_cond,
-                ColorGroup: ColorGroup,
             });
 
             var data = jsPsych.data.get().filterCustom(function (x) {
