@@ -477,7 +477,7 @@ var vaast_instructions_2_G1B = {
     "<img src = 'stimuli/Face132_B.png'></center>" +
     "<br>" +
     "<br>" +
-    "<p class='instructions'><b>Please, take a few moments to look at the faces. </b><br><br>"+
+    "<p class='instructions'><b><u>Please, take a few moments to look at all the faces. </u></b><br><br>"+
     "Your task will be to <b>move forward or to move backward</b> " +
     "as a function of the background color of these images. "+
     "More specific instructions will follow. <br><br></p></center>" +
